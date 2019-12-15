@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/progresql/data
+    environment:
+      - POSTGRES_USER=poolsystem
+      - POSTGRES_PASSWORD=poolsystem
+      - POSTGRES_DB=poolsystem_dev
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on: db
+    volumes:
+      - .:/code
+    env_file:
+      - ./.env.dev
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
