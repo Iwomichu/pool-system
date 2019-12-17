@@ -11,4 +11,5 @@ COPY package.json package-lock.json /usr/src/code/
 RUN npm i
 COPY ./entrypoint.sh /usr/src/code/entrypoint.sh
 COPY . /usr/src/code/
+RUN npm run dev
 ENTRYPOINT [ "/usr/src/code/entrypoint.sh" ]
