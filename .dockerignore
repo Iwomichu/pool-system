@@ -1,2 +1,4 @@
 .vscode/
 .prettierrc
+node_modules
+frontend/static
