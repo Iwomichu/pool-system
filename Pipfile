@@ -9,8 +9,9 @@ v = {editable = true,version = "*"}
 
 [packages]
 django = "*"
-psycopg2 = "*"
 djangorestframework = "*"
+django-environ = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3.8"
