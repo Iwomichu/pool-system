@@ -20,7 +20,7 @@ class PollOption(models.Model):
 class Vote(models.Model):
     user = models.ForeignKey(User, related_name="votes", on_delete=models.CASCADE, null=True)
     poll_option = models.ForeignKey(PollOption, on_delete=models.CASCADE)
-    ip_address = models.GenericIPAddressField()
+    ip_address = models.GenericIPAddressField(null=True)
 
     class Meta:
         unique_together = (("user", "poll_option"),("ip_address", "poll_option"),)
