@@ -16,7 +16,8 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     depends_on: db
     volumes:
-      - .:/code
+      - .:/usr/src/code
+      - /app/node_modules
     env_file:
       - ./poolsystem/.env
     ports:
