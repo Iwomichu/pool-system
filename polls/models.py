@@ -7,9 +7,15 @@ class Poll(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, related_name="polls", on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
+
 class PollOption(models.Model):
     text = models.CharField(max_length=100)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.text
     
 class Vote(models.Model):
     user = models.ForeignKey(User, related_name="votes", on_delete=models.CASCADE, null=True)
@@ -18,3 +24,6 @@ class Vote(models.Model):
 
     class Meta:
         unique_together = (("user", "poll_option"),("ip_address", "poll_option"),)
+
+    def __str__(self):
+        return self.user
