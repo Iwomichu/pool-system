@@ -21,12 +21,9 @@ class PollOption(models.Model):
         return self.text
     
 class Vote(models.Model):
-    user = models.ForeignKey(User, related_name="votes", on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, related_name="votes", on_delete=models.CASCADE)
     poll_option = models.ForeignKey(PollOption, related_name="votes", on_delete=models.CASCADE)
     ip_address = models.GenericIPAddressField(null=True, blank=True)
-
-    class Meta:
-        unique_together = (("user", "poll_option"),("ip_address", "poll_option"))
 
     def __str__(self):
         return self.user.username + " -> " + self.poll_option.poll.title
@@ -50,5 +47,8 @@ class PollPreferenceRelation(models.Model):
     poll = models.ForeignKey(Poll, related_name="poll_preferences", on_delete=models.CASCADE)
     poll_preference = models.ForeignKey(PollPreference, related_name="poll_preferences", on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ("poll", "poll_preference")
+    
     def __str__(self):
         return self.poll.title + " -> " + self.poll_preference.type_of_poll
