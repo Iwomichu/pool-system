@@ -114,60 +114,7 @@
   </style>
 </head>
 <body class="min-vh-100">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary p-0 pl-3 fixed-top">
-    <a class="navbar-brand" href="#">Poll system</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarColor01">
-      <ul class="navbar-nav mr-auto ml-lg-5 layout-nav-ul">
-        <li class="nav-item active mr-sm-5">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item mr-sm-5">
-          <a class="nav-link" href="#">About</a>
-        </li>
-        <li class="nav-item mr-sm-5">
-          <a class="nav-link" href="#">Contact</a>
-        </li>
-      </ul>
-    </div>
-    <ul class="navbar-nav mr-sm-2">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Log out <span class="sr-only">(current)</span></a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-  <div role="main" class="container-fluid h-100">
-    <div class="row">
-      <div class="col-2 text-left d-none d-md-block bg-light sidebar">
-          {% comment %} <div class="dropdown mt-2 w-100 text-center">
-              <a class="dropdown-toggle layout-profile-dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="material-icons align-bottom">perm_identity</span> Jarek Kraus
-              </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </div>
-            <hr> {% endcomment %}
-        <ul class="nav flex-column mt-3">
-          <li class="nav-item">
-            <a class="nav-link active" href="#"><span class="material-icons">home</span> <span class="align-top">Dashboard</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="#"><span class="material-icons">poll</span> <span class="align-top">Polls</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-dark" href="#"><span class="material-icons">how_to_vote</span> <span class="align-top">Votes</span></a>
-          </li>
-        </ul>
-      </div>
-      <div id="app" class="col-9 px-4 pt-3 ml-sm-auto"><!-- React --></div>
-    </div>
-  </div>
+  <div id="app"> <!--React--></div>
 </body>
 {% load static %}
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
