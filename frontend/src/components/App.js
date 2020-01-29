@@ -11,7 +11,7 @@ export class App extends Component {
         <Navbar />
         <div role="main" className="container-fluid h-100"></div>
         <div className="row">
-          <div className="col-1 bg-light sidebar">
+          <div className="col-2 bg-light sidebar">
             <Sidebar />
           </div>
           <div className="col-9 px-4 pt-3 ml-sm-auto">

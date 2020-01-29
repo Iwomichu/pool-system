@@ -4,7 +4,7 @@ import MenuLink from "./MenuLink";
 export class Menu extends Component {
   render() {
     return (
-      <ul className="nav flex-column mt-3">
+      <ul className="nav flex-column mt-3 sidebar-menu">
         <MenuLink />
         <MenuLink />
         <MenuLink />
