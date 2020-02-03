@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 
 class Poll(models.Model):
     title = models.CharField(max_length=100)
+    descriptin = models.CharField(max_length=300)
+    question = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, related_name='polls', on_delete=models.CASCADE)
 
@@ -19,7 +21,7 @@ class PollOption(models.Model):
 
     def __str__(self):
         return self.text
-    
+
 class Vote(models.Model):
     user = models.ForeignKey(User, related_name="votes", on_delete=models.CASCADE)
     poll_option = models.ForeignKey(PollOption, related_name="votes", on_delete=models.CASCADE)
@@ -42,13 +44,14 @@ class PollPreference(models.Model):
     def __str__(self):
         return self.type_of_poll
 
-
 class PollPreferenceRelation(models.Model):
     poll = models.ForeignKey(Poll, related_name="poll_preferences", on_delete=models.CASCADE)
-    poll_preference = models.ForeignKey(PollPreference, related_name="poll_preferences", on_delete=models.CASCADE)
+    poll_preference = models.ForeignKey(PollPreference, 
+                                        related_name="poll_preferences",
+                                        on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ("poll", "poll_preference")
-    
+
     def __str__(self):
         return self.poll.title + " -> " + self.poll_preference.type_of_poll
