@@ -13,9 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import environ
 
-env = environ.Env(
-    DEBUG = (bool, False)
-)
+ENV = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -26,12 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = ENV('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = ENV('DEBUG')
 
-ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS').split(" ")
+ALLOWED_HOSTS = ENV('DJANGO_ALLOWED_HOSTS').split(" ")
 
 
 # Application definition
@@ -84,12 +82,12 @@ WSGI_APPLICATION = 'poolsystem.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": env("SQL_ENGINE"),
-        "NAME": env("SQL_DATABASE"),
-        "USER": env("SQL_USER"),
-        "PASSWORD": env("SQL_PASSWORD"),
-        "HOST": env("SQL_HOST"),
-        "PORT": env("SQL_PORT"),
+        "ENGINE": ENV("SQL_ENGINE"),
+        "NAME": ENV("SQL_DATABASE"),
+        "USER": ENV("SQL_USER"),
+        "PASSWORD": ENV("SQL_PASSWORD"),
+        "HOST": ENV("SQL_HOST"),
+        "PORT": ENV("SQL_PORT"),
     }
 }
 
