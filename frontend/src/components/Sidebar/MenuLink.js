@@ -1,13 +1,17 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 export class MenuLink extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <li className="nav-item">
-        <a className="nav-link active" href="#">
-          <span className="material-icons">home</span>{" "}
-          <span className="align-top">Dashboard</span>
-        </a>
+        <Link className="nav-link active" to={this.props.url}>
+          <span className="material-icons">{this.props.iconName}</span>{" "}
+          <span className="align-top">{this.props.title}</span>
+        </Link>
       </li>
     );
   }

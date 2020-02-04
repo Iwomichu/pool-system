@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
 import Menu from "./Menu";
 import LogoutLink from "./LogoutLink";
 
@@ -6,9 +8,9 @@ export class Navbar extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary p-0 pl-3 fixed-top">
-        <a className="navbar-brand" href="#">
+        <Link className="navbar-brand" to="/">
           Poll system
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -21,7 +23,7 @@ export class Navbar extends Component {
           <span className="navbar-toggler-icon"></span>
         </button>
         <Menu />
-        <LogoutLink />
+        <LogoutLink logoutUrl="/logout" />
       </nav>
     );
   }

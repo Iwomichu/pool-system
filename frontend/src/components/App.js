@@ -1,24 +1,34 @@
 import React, { Component, Fragment } from "react";
 import ReactDOM from "react-dom";
-import Sidebar from "./Sidebar/Sidebar";
+import Dashboard from "./../views/Dashboard";
+import Contact from "./../views/Contact";
+import About from "./../views/About";
 import Navbar from "./Navbar/Navbar";
 import Greeter from "./Greeter";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 export class App extends Component {
   render() {
     return (
-      <Fragment>
+      <Router>
         <Navbar />
-        <div role="main" className="container-fluid h-100"></div>
-        <div className="row">
-          <div className="col-2 bg-light sidebar">
-            <Sidebar />
-          </div>
-          <div className="col-9 px-4 pt-3 ml-sm-auto">
-            <Greeter />
-          </div>
+        <div role="main" className="container-fluid h-100">
+          <Switch>
+            <Route exact path="/">
+              <Greeter />
+            </Route>
+            <Route path="/dashboard">
+              <Dashboard />
+            </Route>
+            <Route path="/contact">
+              <Contact />
+            </Route>
+            <Route path="/about">
+              <About />
+            </Route>
+          </Switch>
         </div>
-      </Fragment>
+      </Router>
     );
   }
 }
