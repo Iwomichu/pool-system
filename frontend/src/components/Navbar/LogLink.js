@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 
 export default function LogLink(props) {
-  const isAuthenticated = useAuth();
-  const params = isAuthenticated
+  const { authTokens } = useAuth();
+  const params = authTokens
     ? { url: props.logoutUrl, text: "Log Out" }
     : { url: props.loginUrl, text: "Log In" };
   return (
