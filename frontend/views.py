@@ -1,5 +1,11 @@
+"""
+frontend views
+"""
 from django.shortcuts import render
 
 # Create your views here.
+
+
 def index(request):
-  return render(request, "frontend/index.html")
+    """fronted class index (default)"""
+    return render(request, "frontend/index.html")

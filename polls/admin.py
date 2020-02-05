@@ -1,3 +1,6 @@
+"""
+polls admin register
+"""
 from django.contrib import admin
 
 from .models import Poll, PollOption, Vote, PollPreference, PollPreferenceRelation

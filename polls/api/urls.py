@@ -1,3 +1,6 @@
+"""
+api urls patterns
+"""
 from django.urls import path
 
 from .view import PollListView, PollDetailView, VoteListView
