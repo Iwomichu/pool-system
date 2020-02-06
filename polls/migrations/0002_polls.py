@@ -33,13 +33,13 @@ def create_data(apps, schema_editor):
                                  password=make_password('user2'))
 
     poll_1 = poll(title="title of the poll_1",
-                  descriptin="descriptin of the poll_1",
+                  description="description of the poll_1",
                   question="question of the poll_1",
                   owner=user_1)
     poll_1.save()
 
     poll_2 = poll(title="title of the poll_2",
-                  descriptin="descriptin of the poll_2",
+                  description="description of the poll_2",
                   question="question of the poll_2",
                   owner=user_2)
     poll_2.save()
