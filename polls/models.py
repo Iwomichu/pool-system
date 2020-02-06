@@ -6,9 +6,9 @@ from django.contrib.auth.models import User
 
 
 class Poll(models.Model):
-    """Poll contains (title, descriptin, question, created, owner)"""
+    """Poll contains (title, description, question, created, owner)"""
     title = models.CharField(max_length=100)
-    descriptin = models.CharField(max_length=300)
+    description = models.CharField(max_length=300)
     question = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(
