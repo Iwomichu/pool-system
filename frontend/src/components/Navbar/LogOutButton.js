@@ -8,7 +8,7 @@ export default function LogOutButton(props) {
   function logOut() {
     setAuthTokens();
     Axios.post(
-      "http://localhost:8000/auth/token/logout/",
+      "/auth/token/logout/",
       {},
       { headers: { Authorization: `Token ${authTokens.auth_token}` } }
     );

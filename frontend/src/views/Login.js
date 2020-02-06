@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Input, Card, Form, Button } from "../components/AuthForm";
 import { Link, Redirect } from "react-router-dom";
 import { useAuth } from "../context/auth";
 import Axios from "axios";
@@ -12,7 +11,7 @@ export default function Login() {
   const { authTokens, setAuthTokens } = useAuth();
 
   function postLogin() {
-    Axios.post("http://localhost:8000/auth/token/login/", {
+    Axios.post("/auth/token/login/", {
       username: userName,
       password: password
     })
