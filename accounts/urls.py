@@ -1,3 +1,6 @@
+"""
+accounts apps url patterns
+"""
 from django.urls import path, include
 
 urlpatterns = [

@@ -2,27 +2,40 @@
 
 from django.conf import settings
 from django.db import migrations
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import get_user_model
 
-def create_data(apps):
+
+def create_superuser(apps, schema_editor):
+    superuser = get_user_model()(
+        is_active=True,
+        is_superuser=True,
+        is_staff=True,
+        username='admin',
+        email='admin@admin.com',
+    )
+    superuser.set_password('admin')
+    superuser.save()
+
+
+def create_data(apps, schema_editor):
     user = apps.get_model(*settings.AUTH_USER_MODEL.split('.'))
     poll = apps.get_model('polls', 'Poll')
     poll_option = apps.get_model('polls', 'PollOption')
     vote = apps.get_model('polls', 'Vote')
 
-    user_1 = user(username='user1',
-                  email='user1@example.com',
-                  password='password')
-    user_1.save()
+    user_1 = user.objects.create(username='user1',
+                                 email='user1@example.com',
+                                 password=make_password('user1'))
 
-    user_2 = user(username='user2',
-                 email='user2@example.com',
-                 password='password')
-    user_2.save()
+    user_2 = user.objects.create(username='user2',
+                                 email='user2@example.com',
+                                 password=make_password('user2'))
 
     poll_1 = poll(title="title of the poll_1",
-                 descriptin="descriptin of the poll_1",
-                 question="question of the poll_1",
-                 owner=user_1)
+                  descriptin="descriptin of the poll_1",
+                  question="question of the poll_1",
+                  owner=user_1)
     poll_1.save()
 
     poll_2 = poll(title="title of the poll_2",
@@ -67,5 +80,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(create_superuser),
         migrations.RunPython(create_data),
     ]
