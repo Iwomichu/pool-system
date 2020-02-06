@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { useState, Component, Fragment } from "react";
 import ReactDOM from "react-dom";
 import Dashboard from "./../views/Dashboard";
 import Contact from "./../views/Contact";
@@ -6,10 +6,19 @@ import About from "./../views/About";
 import Navbar from "./Navbar/Navbar";
 import Greeter from "./Greeter";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import PrivateRoute from "./PrivateRoute";
+import { AuthContext } from "../context/auth";
+import Login from "../views/Login";
+import Signup from "../views/Signup";
 
-export class App extends Component {
-  render() {
-    return (
+export default function App(props) {
+  const [authTokens, setAuthTokens] = useState();
+  const setTokens = data => {
+    localStorage.setItem("tokens", JSON.stringify(data));
+    setAuthTokens(data);
+  };
+  return (
+    <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
       <Router>
         <Navbar />
         <div role="main" className="container-fluid h-100">
@@ -17,22 +26,21 @@ export class App extends Component {
             <Route exact path="/">
               <Greeter />
             </Route>
-            <Route path="/dashboard">
-              <Dashboard />
-            </Route>
+            <PrivateRoute path="/dashboard" component={Dashboard} />
             <Route path="/contact">
               <Contact />
             </Route>
             <Route path="/about">
               <About />
             </Route>
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
           </Switch>
         </div>
       </Router>
-    );
-  }
+    </AuthContext.Provider>
+  );
 }
-export default App;
 
 const wrapper = document.getElementById("app");
 wrapper ? ReactDOM.render(<App />, wrapper) : null;

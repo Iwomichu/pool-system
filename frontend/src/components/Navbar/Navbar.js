@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 import Menu from "./Menu";
-import LogoutLink from "./LogoutLink";
+import LogLink from "./LogLink";
 
 export class Navbar extends Component {
   render() {
@@ -23,7 +23,7 @@ export class Navbar extends Component {
           <span className="navbar-toggler-icon"></span>
         </button>
         <Menu />
-        <LogoutLink logoutUrl="/logout" />
+        <LogLink logoutUrl="/" loginUrl="/login" />
       </nav>
     );
   }
