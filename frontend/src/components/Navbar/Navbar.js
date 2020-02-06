@@ -23,7 +23,7 @@ export class Navbar extends Component {
           <span className="navbar-toggler-icon"></span>
         </button>
         <Menu />
-        <LogLink logoutUrl="/logout" loginUrl="/login" />
+        <LogLink logoutUrl="/" loginUrl="/login" />
       </nav>
     );
   }

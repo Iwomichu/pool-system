@@ -9,7 +9,7 @@ export default function Login() {
   const [isError, setError] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const { setAuthTokens } = useAuth();
+  const { authTokens, setAuthTokens } = useAuth();
 
   function postLogin() {
     Axios.post("http://localhost:8000/auth/token/login/", {
