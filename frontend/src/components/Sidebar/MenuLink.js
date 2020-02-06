@@ -1,20 +1,20 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch, useLocation } from "react-router-dom";
 
-export class MenuLink extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <li className="nav-item">
-        <Link className="nav-link active" to={this.props.url}>
-          <span className="material-icons">{this.props.iconName}</span>{" "}
-          <span className="align-top">{this.props.title}</span>
-        </Link>
-      </li>
-    );
-  }
+export default function MenuLink(props) {
+  const { path, url } = useRouteMatch();
+  const location = useLocation();
+  return (
+    <li className="nav-item">
+      <Link
+        className={`nav-link ${
+          location.pathname === `${url}${props.url}` ? "active" : ""
+        }`}
+        to={`${url}${props.url}`}
+      >
+        <span className="material-icons">{props.iconName}</span>{" "}
+        <span className="align-top">{props.title}</span>
+      </Link>
+    </li>
+  );
 }
-
-export default MenuLink;
