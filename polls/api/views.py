@@ -11,7 +11,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 from polls.models import Poll, Vote, PollOption
-from .serializers import PollSerializer, VoteSerializer, PollOptionSerializer, PollSerializerText, PollOptionSerializerText
+from .serializers import PollSerializer, VoteSerializer, PollOptionSerializer, PollCreateSerializer, VoteCreateSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -31,9 +31,7 @@ class PollListText(APIView):
         return Response({"title": poll.title,
                          "question": poll.question,
                          "description": poll.description,
-                         "options": [
-                             x
-                         ]})
+                         "options": x})
 
 
 class PollList(APIView):
@@ -48,10 +46,15 @@ class PollList(APIView):
 
     def post(self, request):
         """create new poll (only for authenticated)"""
-        request.data.owner = request.user
-        serializer = PollSerializer(data=request.data)
+        list_poll_options = []
+        if request.data["poll_options"] != "":
+            list_poll_options = request.data["poll_options"].split(",")
+        serializer = PollCreateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(owner=request.user)
+            if len(list_poll_options) > 0:
+                [PollOption.objects.create(text=text, poll=Poll.objects.get(
+                    id=serializer.data["id"])) for text in list_poll_options]
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -126,7 +129,7 @@ class PollDetailView(RetrieveAPIView):
 
 class VoteListView(APIView):
     """VoteListView class"""
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    # permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get(self, request, p_k):
         """get all votes from poll id"""
@@ -135,11 +138,21 @@ class VoteListView(APIView):
         serializer = VoteSerializer(questions, many=True)
         return Response(serializer.data)
 
+    def get_user(self, p_k):
+        try:
+            return User.objects.get(pk=p_k)
+        except User.DoesNotExist:
+            raise Http404
+
     def put(self, request):
         """create new vote"""
-        request.data.user = request.user
-        serializer = VoteSerializer(data=request.data)
+        if request.data['user'] == 1:
+            user = User.objects.get(username="anonymous")
+        else:
+            user = self.get_user(request.data['user'])
+
+        serializer = VoteCreateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
