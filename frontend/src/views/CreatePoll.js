@@ -34,14 +34,16 @@ export default function CreatePoll(props) {
         title: title,
         description: description,
         question: question,
-        poll_options: options.map(option => option.text)
+        poll_options: "[" + options.map(option => option.text).join(",") + "]"
       },
       {
         headers: {
           Authorization: `Token ${authTokens.auth_token}`
         }
       }
-    ).catch(err => setError(true));
+    )
+      .then(result => setIsCreated(true))
+      .catch(err => setError(true));
   }
 
   function deleteOption(index) {
