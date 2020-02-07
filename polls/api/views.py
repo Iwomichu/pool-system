@@ -44,17 +44,25 @@ class PollList(APIView):
         serializer = PollSerializer(questions, many=True)
         return Response(serializer.data)
 
+    def get_poll(self, p_k):
+        try:
+            return Poll.objects.get(pk=p_k)
+        except Poll.DoesNotExist:
+            raise Http404
+
     def post(self, request):
         """create new poll (only for authenticated)"""
         list_poll_options = []
-        if request.data["poll_options"] != "":
-            list_poll_options = request.data["poll_options"].split(",")
+        if request.data["poll_options"][1:-1].split(",") != [""]:
+            list_poll_options = request.data["poll_options"][1:-1].split(",")
         serializer = PollCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(owner=request.user)
             if len(list_poll_options) > 0:
-                [PollOption.objects.create(text=text, poll=Poll.objects.get(
-                    id=serializer.data["id"])) for text in list_poll_options]
+                poll_id = self.get_poll(serializer.data["id"])
+                for text in list_poll_options:
+                    PollOption.objects.create(text=text.replace(
+                        "\"", ""), poll=poll_id)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
