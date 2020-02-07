@@ -11,8 +11,21 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 from polls.models import Poll, Vote, PollOption
-from .serializers import PollSerializer, VoteUserSerializer, VoteSerializer, PollOptionSerializer, PollCreateSerializer, VoteCreateSerializer
+from .serializers import CurrentUserSerializer, PollSerializer, VoteUserSerializer, VoteSerializer, PollOptionSerializer, PollCreateSerializer, VoteCreateSerializer
 from .permissions import IsOwnerOrReadOnly
+
+
+class UserView(APIView):
+    def get_user(self, p_k):
+        try:
+            return User.objects.get(pk=p_k)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request):
+        user = self.get_user(request.data["id"])
+        serializer = CurrentUserSerializer(user)
+        return Response(serializer.data)
 
 
 class PollListText(APIView):
@@ -140,10 +153,16 @@ class UserVotesView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        """get all votes from poll id"""
-        votes = request.user.votes
-        serializer = VoteSerializer(votes, many=True)
-        return Response(serializer.data)
+        votes = request.user.votes.all()[0].poll_option.poll.title
+        # votes = request.
+
+        # x = poll.poll_options.all().values_list('text', flat=True)
+        # x = [{"text": el} for el in x]
+        # return Response({"title": poll.title,
+        #                  "question": poll.question,
+        #                  "description": poll.description,
+        #                  "options": x})
+        return Response(votes)
 
 
 class VoteListView(APIView):
