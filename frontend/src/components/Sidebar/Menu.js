@@ -7,9 +7,9 @@ export class Menu extends Component {
     const { path, url } = this.props.match;
     return (
       <ul className="nav flex-column mt-3 sidebar-menu">
-        <MenuLink url={`${url}`} iconName="home" title="Home" />
-        <MenuLink url={`${url}/polls`} iconName="poll" title="Polls" />
-        <MenuLink url={`${url}/votes`} iconName="how_to_vote" title="Votes" />
+        <MenuLink url={``} iconName="home" title="Home" />
+        <MenuLink url={`/polls`} iconName="poll" title="Polls" />
+        <MenuLink url={`/votes`} iconName="how_to_vote" title="Votes" />
       </ul>
     );
   }
