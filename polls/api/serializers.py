@@ -10,6 +10,12 @@ class CurrentUserSerializer(serializers.ModelSerializer):
 
 
 class VoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vote
+        fields = '__all__'
+
+
+class VoteUserSerializer(serializers.ModelSerializer):
     user = CurrentUserSerializer()
 
     class Meta:
@@ -18,7 +24,7 @@ class VoteSerializer(serializers.ModelSerializer):
 
 
 class PollOptionSerializer(serializers.ModelSerializer):
-    votes = VoteSerializer(many=True, read_only=True)
+    votes = VoteUserSerializer(many=True, read_only=True)
 
     class Meta:
         model = PollOption
