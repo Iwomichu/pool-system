@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import PollOptionListElem from "../components/PollCreation/PollOptionListElem";
 import { PollCreationContext } from "../context/pollCreation";
+import { useAuth } from "../context/auth";
 import { InformationForm } from "../components/PollCreation/InformationForm";
 import PollOptionList from "../components/PollCreation/PollOptionList";
 import Axios from "axios";
 import { Redirect } from "react-router";
 
 export default function CreatePoll(props) {
+  const [authTokens] = useAuth();
   const [stage, setStage] = useState(0);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -26,18 +28,41 @@ export default function CreatePoll(props) {
   }
   function createPoll() {
     console.log({ title, description, question, options });
-    setIsCreated(true);
-    // Axios.post("", {
-    //   title: title,
-    //   description: description,
-    //   question: question,
-    //   options: options
-    // })
-    //   .then(result => {
-    //     if (result.status === 200 || result.status === 201) setIsCreated(true);
-    //     else setError(true);
-    //   })
-    //   .catch(err => setError(true));
+    Axios.post(
+      "/api/poll/",
+      {
+        title: title,
+        description: description,
+        question: question,
+        owner: authTokens.id
+      },
+      {
+        headers: {
+          Authentication: `Token ${authTokens.auth_token}`
+        }
+      }
+    )
+      .then(result => {
+        if (result.status === 200 || result.status === 201) {
+          setIsCreated(true);
+          Promise.all(
+            options.map(option => {
+              return Axios.post(
+                "/api/poll/options",
+                { poll: result.data.id, text: option.text },
+                {
+                  headers: {
+                    Authentication: `Token ${authTokens.auth_token}`
+                  }
+                }
+              );
+            })
+          )
+            .then(console.log("sent"))
+            .catch(e => console.log(e));
+        } else setError(true);
+      })
+      .catch(err => setError(true));
   }
 
   function deleteOption(index) {

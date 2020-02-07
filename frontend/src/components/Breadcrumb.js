@@ -7,7 +7,9 @@ export default function Breadcrumb(props) {
   return (
     <ol className="breadcrumb">
       {location.pathname.split("/").map(part => (
-        <span className="breadcrumb-item text-capitalize">{part}</span>
+        <span key={part} className="breadcrumb-item text-capitalize">
+          {part}
+        </span>
       ))}
     </ol>
   );
