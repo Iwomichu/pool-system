@@ -8,7 +8,7 @@ import Axios from "axios";
 import { Redirect } from "react-router";
 
 export default function CreatePoll(props) {
-  const [authTokens] = useAuth();
+  const { authTokens } = useAuth();
   const [stage, setStage] = useState(0);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -29,40 +29,19 @@ export default function CreatePoll(props) {
   function createPoll() {
     console.log({ title, description, question, options });
     Axios.post(
-      "/api/poll/",
+      "http://localhost:8000/api/poll/",
       {
         title: title,
         description: description,
         question: question,
-        owner: authTokens.id
+        poll_options: options.map(option => option.text)
       },
       {
         headers: {
-          Authentication: `Token ${authTokens.auth_token}`
+          Authorization: `Token ${authTokens.auth_token}`
         }
       }
-    )
-      .then(result => {
-        if (result.status === 200 || result.status === 201) {
-          setIsCreated(true);
-          Promise.all(
-            options.map(option => {
-              return Axios.post(
-                "/api/poll/options",
-                { poll: result.data.id, text: option.text },
-                {
-                  headers: {
-                    Authentication: `Token ${authTokens.auth_token}`
-                  }
-                }
-              );
-            })
-          )
-            .then(console.log("sent"))
-            .catch(e => console.log(e));
-        } else setError(true);
-      })
-      .catch(err => setError(true));
+    ).catch(err => setError(true));
   }
 
   function deleteOption(index) {
