@@ -5,13 +5,13 @@ from django.contrib.auth.models import User
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import status
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 from polls.models import Poll, Vote, PollOption
-from .serializers import PollSerializer, VoteSerializer, PollOptionSerializer, PollCreateSerializer, VoteCreateSerializer
+from .serializers import PollSerializer, VoteUserSerializer, VoteSerializer, PollOptionSerializer, PollCreateSerializer, VoteCreateSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -135,15 +135,26 @@ class PollDetailView(RetrieveAPIView):
     serializer_class = PollSerializer
 
 
+class UserVotesView(APIView):
+    """User votes"""
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        """get all votes from poll id"""
+        votes = request.user.votes
+        serializer = VoteSerializer(votes, many=True)
+        return Response(serializer.data)
+
+
 class VoteListView(APIView):
     """VoteListView class"""
-    # permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get(self, request, p_k):
         """get all votes from poll id"""
         questions = Vote.objects.filter(
             poll_option__poll=Poll.objects.get(pk=p_k))
-        serializer = VoteSerializer(questions, many=True)
+        serializer = VoteUserSerializer(questions, many=True)
         return Response(serializer.data)
 
     def get_user(self, p_k):
@@ -154,13 +165,13 @@ class VoteListView(APIView):
 
     def put(self, request):
         """create new vote"""
-        if request.data['user'] == 1:
-            user = User.objects.get(username="anonymous")
-        else:
-            user = self.get_user(request.data['user'])
+        # if request.data['user'] == 1:
+        #     user = User.objects.get(username="anonymous")
+        # else:
+        #     user = self.get_user(request.data['user'])
 
         serializer = VoteCreateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=user)
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

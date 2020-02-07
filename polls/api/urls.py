@@ -3,9 +3,10 @@ api urls patterns
 """
 from django.urls import path
 
-from .views import PollList, PollItem, VoteListView, PollOptionsList, PollOptionItem, PollListText
+from .views import PollList, PollItem, VoteListView, PollOptionsList, PollOptionItem, PollListText, UserVotesView
 
 urlpatterns = [
+    path('votes/', UserVotesView.as_view()),
     path('poll/', PollList.as_view()),
     path('poll/vote/', VoteListView.as_view()),
     path('poll/options/', PollOptionsList.as_view()),
