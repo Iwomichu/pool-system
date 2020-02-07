@@ -7,23 +7,27 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import Http404
+from django import http
 from django.shortcuts import get_object_or_404
 
 from polls.models import Poll, Vote, PollOption
-from .serializers import CurrentUserSerializer, PollSerializer, VoteUserSerializer, VoteSerializer,\
+from .serializers import CurrentUserSerializer, PollSerializer, VoteUserSerializer,\
     PollOptionSerializer, PollCreateSerializer, VoteCreateSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
 class UserView(APIView):
+    """UserView from id get user information"""
+
     def get_user(self, p_k):
+        """get user"""
         try:
             return User.objects.get(pk=p_k)
         except User.DoesNotExist:
-            raise Http404
+            raise http.Http404
 
     def get(self, request, p_k):
+        """get method"""
         user = self.get_user(p_k)
         serializer = CurrentUserSerializer(user)
         return Response(serializer.data)
@@ -34,18 +38,20 @@ class PollListText(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_object(self, p_k):
+        """get objects"""
         obj = get_object_or_404(Poll, pk=p_k)
         self.check_object_permissions(self.request, obj)
         return obj
 
     def get(self, request, p_k):
+        """get method"""
         poll = self.get_object(p_k)
-        x = poll.poll_options.all().values_list('text', flat=True)
-        x = [{"text": el} for el in x]
+        options = poll.poll_options.all().values_list('text', flat=True)
+        options = [{"text": el} for el in options]
         return Response({"title": poll.title,
                          "question": poll.question,
                          "description": poll.description,
-                         "options": x})
+                         "options": options})
 
 
 class PollList(APIView):
@@ -59,10 +65,11 @@ class PollList(APIView):
         return Response(serializer.data)
 
     def get_poll(self, p_k):
+        """get poll"""
         try:
             return Poll.objects.get(pk=p_k)
         except Poll.DoesNotExist:
-            raise Http404
+            raise http.Http404
 
     def post(self, request):
         """create new poll (only for authenticated)"""
@@ -89,16 +96,19 @@ class PollItem(APIView):
     )
 
     def get_object(self, p_k):
+        """get objects permissions"""
         obj = get_object_or_404(Poll, pk=p_k)
         self.check_object_permissions(self.request, obj)
         return obj
 
     def get(self, request, p_k):
+        """get method"""
         poll = self.get_object(p_k)
         serializer = PollSerializer(poll)
         return Response(serializer.data)
 
     def delete(self, request, p_k):
+        """deleted method"""
         question = self.get_object(p_k)
         question.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -109,6 +119,7 @@ class PollOptionsList(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def post(self, request):
+        """post method"""
         serializer = PollOptionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -121,17 +132,20 @@ class PollOptionItem(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get_object(self, p_k):
+        """get objects poll option"""
         try:
             return PollOption.objects.get(pk=p_k)
         except PollOption.DoesNotExist:
-            raise Http404
+            raise http.Http404
 
     def get(self, request, p_k):
+        """get method"""
         poll_option = self.get_object(p_k)
         serializer = PollOptionSerializer(poll_option)
         return Response(serializer.data)
 
     def delete(self, request, p_k):
+        """delete method"""
         poll_option = self.get_object(p_k)
         poll_option.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -154,6 +168,7 @@ class UserVotesView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
+        """get method"""
         votes = request.user.votes.all()
         list_votes = []
         for vote in votes:
@@ -178,18 +193,14 @@ class VoteListView(APIView):
         return Response(serializer.data)
 
     def get_user(self, p_k):
+        """get user"""
         try:
             return User.objects.get(pk=p_k)
         except User.DoesNotExist:
-            raise Http404
+            raise http.Http404
 
     def put(self, request):
         """create new vote"""
-        # if request.data['user'] == 1:
-        #     user = User.objects.get(username="anonymous")
-        # else:
-        #     user = self.get_user(request.data['user'])
-
         serializer = VoteCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)

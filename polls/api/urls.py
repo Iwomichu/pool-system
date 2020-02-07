@@ -3,7 +3,8 @@ api urls patterns
 """
 from django.urls import path
 
-from .views import UserView, PollList, PollItem, VoteListView, PollOptionsList, PollOptionItem, PollListText, UserVotesView
+from .views import UserView, PollList, PollItem, VoteListView, PollOptionsList, \
+    PollOptionItem, PollListText, UserVotesView
 
 urlpatterns = [
     path('user/<p_k>/', UserView.as_view()),
