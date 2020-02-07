@@ -18,6 +18,17 @@ def create_superuser(apps, schema_editor):
     superuser.save()
 
 
+def create_anonymous(apps, schema_editor):
+    anonymous = get_user_model()(
+        is_active=True,
+        is_staff=True,
+        username='anonymous',
+        email='anonymous@.com',
+    )
+    anonymous.set_password('anonymous')
+    anonymous.save()
+
+
 def create_data(apps, schema_editor):
     user = apps.get_model(*settings.AUTH_USER_MODEL.split('.'))
     poll = apps.get_model('polls', 'Poll')
@@ -80,6 +91,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(create_anonymous),
         migrations.RunPython(create_superuser),
         migrations.RunPython(create_data),
     ]

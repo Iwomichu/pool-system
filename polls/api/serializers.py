@@ -33,16 +33,15 @@ class PollSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
-class PollOptionSerializerText(serializers.ModelSerializer):
-
-    class Meta:
-        model = PollOption
-        fields = ('text')
-
-
-class PollSerializerText(serializers.ModelSerializer):
-    options = PollOptionSerializerText(many=True, read_only=True)
+class PollCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Poll
-        fields = ('title', 'question', 'description', 'options')
+        exclude = ('owner', )
+
+
+class VoteCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Vote
+        exclude = ('user', )
