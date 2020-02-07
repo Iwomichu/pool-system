@@ -2,16 +2,17 @@
 api views
 """
 from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import status
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 from polls.models import Poll, Vote, PollOption
-from .serializers import CurrentUserSerializer, PollSerializer, VoteUserSerializer, VoteSerializer, PollOptionSerializer, PollCreateSerializer, VoteCreateSerializer
+from .serializers import CurrentUserSerializer, PollSerializer, VoteUserSerializer, VoteSerializer,\
+    PollOptionSerializer, PollCreateSerializer, VoteCreateSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -22,8 +23,8 @@ class UserView(APIView):
         except User.DoesNotExist:
             raise Http404
 
-    def get(self, request):
-        user = self.get_user(request.data["id"])
+    def get(self, request, p_k):
+        user = self.get_user(p_k)
         serializer = CurrentUserSerializer(user)
         return Response(serializer.data)
 

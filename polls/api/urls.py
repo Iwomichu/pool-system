@@ -6,7 +6,7 @@ from django.urls import path
 from .views import UserView, PollList, PollItem, VoteListView, PollOptionsList, PollOptionItem, PollListText, UserVotesView
 
 urlpatterns = [
-    path('user/', UserView.as_view()),
+    path('user/<p_k>/', UserView.as_view()),
     path('votes/', UserVotesView.as_view()),
     path('poll/', PollList.as_view()),
     path('poll/vote/', VoteListView.as_view()),
