@@ -153,16 +153,16 @@ class UserVotesView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        votes = request.user.votes.all()[0].poll_option.poll.title
-        # votes = request.
-
-        # x = poll.poll_options.all().values_list('text', flat=True)
-        # x = [{"text": el} for el in x]
-        # return Response({"title": poll.title,
-        #                  "question": poll.question,
-        #                  "description": poll.description,
-        #                  "options": x})
-        return Response(votes)
+        votes = request.user.votes.all()
+        list_votes = []
+        for vote in votes:
+            list_votes.append(
+                {"poll_option_text": vote.poll_option.text,
+                 "poll_title": vote.poll_option.poll.title,
+                 "poll_id": vote.poll_option.poll.id
+                 }
+            )
+        return Response(list_votes)
 
 
 class VoteListView(APIView):
